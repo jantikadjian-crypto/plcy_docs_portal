@@ -1,0 +1,28 @@
+---
+title: "Security policy standards"
+category: "Policies"
+type: "Document"
+audience: public
+updated: "2026-07-17"
+tags: ["policy", "security", "mfa", "sso", "byok", "standards"]
+---
+
+# Security policy standards
+
+_Baseline authentication, session, network, and data-protection requirements._
+
+## Baseline requirements
+
+- MFA is required for every admin; phishing-resistant factors (passkeys) are preferred and SMS is discouraged.
+
+- SSO is enforced; local password login is disabled where the IdP governs access.
+
+- Sessions time out, idle-lock, and cap concurrent sessions; the IP allowlist is enforced for privileged environments.
+
+- Encryption at rest is always on; customer-managed keys (BYOK/HSM) are available.
+
+These map directly to the controls in Settings → Security. The posture score measures adherence and surfaces the highest-weight gaps first.
+
+---
+
+Tags: `policy` `security` `mfa` `sso` `byok` `standards`

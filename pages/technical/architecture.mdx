@@ -1,0 +1,30 @@
+---
+title: "Architecture overview"
+category: "Technical"
+type: "Graphic"
+audience: public
+updated: "2026-07-17"
+tags: ["architecture", "control plane", "data plane", "design"]
+---
+
+# Architecture overview
+
+_The SaaS console/control plane, the open-source data plane, and how they connect._
+
+PLCY pairs a SaaS governance console and control plane with an open-source data plane that runs inside the customer environment. The console configures policy; the data plane enforces it on every AI request in real time and streams evidence back.
+
+![architecture.svg](/diagrams/architecture.svg)
+
+## Planes
+
+- Control plane (SaaS) — customer/policy management, billing, audit and compliance reporting, this console.
+
+- Data plane (open source) — deployed in the customer cloud, VPC, sovereign infrastructure, or air-gapped network.
+
+- Model access — BYOK (customer’s provider/AWS) by default, or a PLCY-managed credits layer.
+
+This console is a React/TypeScript SPA. For how the data plane is deployed inside a customer VPC, see the Network & deployment topology article.
+
+---
+
+Tags: `architecture` `control plane` `data plane` `design`

@@ -1,0 +1,48 @@
+---
+title: "Network & deployment topology"
+category: "Technical"
+type: "Graphic"
+audience: public
+updated: "2026-07-17"
+tags: ["network", "vpc", "eks", "kubernetes", "alb", "opa", "otel", "sidecar", "redis", "s3", "observability", "topology"]
+---
+
+# Network & deployment topology
+
+_How the PLCY data plane runs inside a customer VPC — load balancing, EKS pods, sidecars, data stores, and observability._
+
+The PLCY data plane deploys into the customer’s own AWS VPC. Traffic enters through an Application Load Balancer, is routed by ingress rules to the PLCY gateway pod, and every request is governed in-line by an OPA sidecar before reaching model or backend services. Telemetry is exported via OpenTelemetry to the customer’s observability backend.
+
+![network-topology.svg](/diagrams/network-topology.svg)
+
+## Request path
+
+- User → ALB — HTTPS enters the VPC through the AWS Application Load Balancer.
+
+- ALB → Ingress rules — listener rules route frontend (/), backend (/api/*, /vault/*, /swagger/*), and socket (/socket/) traffic, managed by the AWS ALB Controller.
+
+- Ingress → PLCY Gateway pod — the AI request hits the gateway, where the OPA sidecar evaluates policy in real time.
+
+- Pod → services — governed requests reach backend microservices, the Node.js frontend, or background tasks; all application pods carry OPA & OTel sidecars, meshed with mTLS.
+
+## Data & state
+
+- Amazon RDS (PostgreSQL) — relational state for the application.
+
+- Amazon ElastiCache (Redis) — caching and fast lookups; cache hits reduce billable governed requests.
+
+- Amazon S3 (multi-region) — data lake, backups, and media.
+
+- AWS NAT Gateway — controlled egress for private subnets.
+
+## Observability
+
+- OTel collector sidecars export traces and metrics to the observability backend.
+
+- Amazon CloudWatch (logs, metrics), AWS X-Ray (tracing), and Amazon Managed Prometheus / Grafana.
+
+- The same evidence stream feeds the control-plane audit and compliance surfaces.
+
+---
+
+Tags: `network` `vpc` `eks` `kubernetes` `alb` `opa` `otel` `sidecar` `redis` `s3` `observability` `topology`

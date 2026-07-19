@@ -1,0 +1,30 @@
+---
+title: "Raise the security posture score"
+category: "How-to"
+type: "Guide"
+audience: internal
+updated: "2026-07-17"
+tags: ["security", "posture", "score", "mfa", "sso", "hardening", "policy"]
+---
+
+# Raise the security posture score
+
+_Tune the org security policy to close the highest-weight gaps._
+
+The posture score is computed live from the security policy and weighted — a few high-impact controls move it most. You need the settings.modify capability.
+
+## Steps
+
+1. Open Settings → Security and read the current score and its top gaps.
+
+2. Enable the high-weight controls first: require MFA, prefer phishing-resistant factors, enforce SSO, and enforce the IP allowlist.
+
+3. Tighten sessions and API access (timeouts, scoped tokens, token lifetimes).
+
+4. Watch the score climb as each control turns on.
+
+5. Confirm the same score and cleared gaps now show on Admin Security and Fleet Posture.
+
+---
+
+Tags: `security` `posture` `score` `mfa` `sso` `hardening` `policy`

@@ -1,0 +1,34 @@
+---
+title: "Enroll a managed device"
+category: "How-to"
+type: "Guide"
+audience: internal
+updated: "2026-07-16"
+tags: ["device", "enroll", "mdm", "posture", "trusted", "security"]
+---
+
+# Enroll a managed device
+
+_Register a device so it can reach the console under “Require managed devices”._
+
+Enrolling issues a one-time code; on check-in the device reports a hardware-bound Device ID and passes a posture check before it’s trusted.
+
+## Steps
+
+1. Go to Settings → Security → Managed devices and choose Enroll device.
+
+2. Share the one-time enrollment code with the device owner (QR code + install command are provided).
+
+3. On the device, run the install; it checks in and reports its Device ID (Hardware UUID + motherboard serial).
+
+4. Confirm the posture checks pass — disk encryption, current OS, screen lock, not jailbroken, MDM-enrolled, and company VPN.
+
+5. Verify the device shows as Trusted in the list.
+
+6. When ready, turn on “Require managed devices” so only Trusted devices can access the console.
+
+Tip: a device that later drifts shows as At risk; a non-compliant one is Blocked and cannot sign in while the requirement is on.
+
+---
+
+Tags: `device` `enroll` `mdm` `posture` `trusted` `security`

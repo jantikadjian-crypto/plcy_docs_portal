@@ -1,0 +1,7 @@
+{
+  "architecture": "Architecture overview",
+  "network-topology": "Network & deployment topology",
+  "deployment-models": "Deployment models",
+  "model-access": "Model access: BYOK vs PLCY-managed",
+  "api-keys": "API keys & programmatic access"
+}

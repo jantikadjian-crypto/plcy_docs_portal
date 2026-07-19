@@ -1,0 +1,34 @@
+---
+title: "The configure → observe loop"
+category: "Features"
+type: "Document"
+audience: customer
+updated: "2026-07-17"
+tags: ["observability", "signals", "posture", "telemetry", "otel", "loop", "monitoring"]
+---
+
+# The configure → observe loop
+
+_How what you set in configuration shows up as live signals across the console._
+
+PLCY is built as a loop: you configure policy and controls in one place, and the console observes the result everywhere else. “What you set” becomes “what you see” — configuration is never a dead end, it drives live signals.
+
+## Where the loop shows up
+
+- Security — the policy you edit in Settings → Security produces a live posture score and prioritized gaps that reappear on Admin Security and Fleet Posture.
+
+- Billing — payment, dunning, and dispute events flow into Notifications and page on-call.
+
+- Devices — enrolled-device posture (trusted / at-risk / blocked) reflects the managed-device policy.
+
+- Fleet — cluster drift, quota pressure, and pod-security gaps roll up on Fleet Posture.
+
+## How evidence flows
+
+In production the data plane emits telemetry and evidence via OpenTelemetry to the observability backend (CloudWatch, X-Ray, Prometheus/Grafana), and the same stream feeds the control-plane audit and compliance surfaces. The Observability page is where those operational signals are read.
+
+The practical upshot: after you change a control, you can immediately verify the effect on the corresponding observability surface rather than guessing.
+
+---
+
+Tags: `observability` `signals` `posture` `telemetry` `otel` `loop` `monitoring`

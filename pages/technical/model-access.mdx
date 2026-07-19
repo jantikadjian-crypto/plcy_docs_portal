@@ -1,0 +1,28 @@
+---
+title: "Model access: BYOK vs PLCY-managed"
+category: "Technical"
+type: "Document"
+audience: public
+updated: "2026-07-17"
+tags: ["byok", "managed", "model", "bedrock", "credits", "inference"]
+---
+
+# Model access: BYOK vs PLCY-managed
+
+_Who pays for inference, and how each mode is billed._
+
+## BYOK (default)
+
+The customer connects their own model provider / AWS account. PLCY governs, routes, and audits the traffic, but model tokens bill directly to the customer — PLCY takes no markup on inference. PLCY charges the platform subscription and the relevant entitlement.
+
+## PLCY-managed
+
+PLCY provisions model access (e.g. AWS Bedrock) and resells it as metered credits plus a service fee. Best for teams that want zero provider setup.
+
+## AWS Bedrock
+
+The Bedrock model catalog (Pricing & Plans → Bedrock models) lists which models are available, the plan tier that unlocks each, and whether it is customer-enabled (BYOK) or PLCY-offered (managed).
+
+---
+
+Tags: `byok` `managed` `model` `bedrock` `credits` `inference`

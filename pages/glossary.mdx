@@ -1,0 +1,337 @@
+---
+title: Glossary
+audience: public
+---
+
+# Glossary
+
+_Terms, acronyms, and concepts used across the PLCY platform._
+
+## Platform & Architecture
+
+**Air-gapped**  
+A single-tenant deployment with no outbound network connectivity, for the most sensitive environments. The data plane runs fully disconnected.  
+_Where:_ Deployment models doc; Regions.  ·  _See also:_ Sovereign Cloud
+
+**ALB** — _Application Load Balancer_  
+AWS’s HTTP/HTTPS load balancer. It fronts the cluster and routes API and socket traffic to the PLCY gateway via ingress/listener rules.  
+_Where:_ Architecture diagram.
+
+**BYOK** — _Bring Your Own Key_  
+The default model-access mode: the customer connects their own model provider / AWS account, so inference tokens bill directly to them. PLCY governs and audits the traffic but takes no markup on inference.  
+_Where:_ Pricing → Quote (model access); Model access doc.  ·  _See also:_ PLCY-managed, Bedrock
+
+**Control plane**  
+The PLCY-hosted SaaS side — customer & policy management, billing, audit, and compliance reporting. This console is its front end. It configures policy but does not sit in the request path.  
+_Where:_ This console; Architecture doc.  ·  _See also:_ Data plane
+
+**Data plane**  
+The open-source enforcement layer that runs inside the customer environment and evaluates every AI request in real time against the configured policy, then streams evidence back to the control plane.  
+_Where:_ Deployed in the customer cloud/VPC; Architecture doc.  ·  _See also:_ Control plane, OPA
+
+**Dedicated Cloud**  
+A single-tenant deployment where the customer picks an AWS region and a size tier (Small/Medium/Large) — not individual nodes. Included on Enterprise Cloud; a priced add-on otherwise.  
+_Where:_ Pricing → Quote (Dedicated Cloud); Deployment models doc.
+
+**EKS** — _Elastic Kubernetes Service_  
+AWS’s managed Kubernetes. PLCY’s data plane runs as pods on an EKS cluster inside the customer VPC.  
+_Where:_ Architecture diagram; Cluster Health.  ·  _See also:_ Sidecar, PSA
+
+**HITL** — _Human-in-the-loop_  
+A control that routes a flagged AI action to a human for review or approval before it proceeds.  
+_Where:_ Pricing entitlements; Policy enforcement.
+
+**Model routing**  
+Rules that decide which model or region an AI request is sent to — used to honour residency, cost, and capability requirements.  
+_Where:_ Model Routing (Sovereignty).  ·  _See also:_ Residency
+
+**OPA** — _Open Policy Agent_  
+The open-source policy engine PLCY uses to evaluate governance policy at request time. It runs as a sidecar / gateway next to each application pod.  
+_Where:_ Architecture diagram; Policy Packs / Enforcement.  ·  _See also:_ Sidecar, Data plane
+
+**OTel** — _OpenTelemetry_  
+The open standard for telemetry (traces, metrics, logs). An OTel collector sidecar exports evidence and traces to the observability backend.  
+_Where:_ Architecture diagram; Observability.  ·  _See also:_ Observability
+
+**PLCY**  
+The AI Governance & Policy Enforcement platform. It enforces security, privacy, compliance, and human-oversight policies on every AI request in real time.  
+_Where:_ The whole product; this console operates it.
+
+**PLCY-managed**  
+The alternative to BYOK: PLCY provisions model access (e.g. Bedrock) and resells it as metered credits plus a service fee — zero provider setup for the customer.  
+_Where:_ Pricing → Quote (model access).  ·  _See also:_ BYOK
+
+**RAG** — _Retrieval-Augmented Generation_  
+An AI technique where a model retrieves relevant documents or data and includes them in its prompt to ground the response in real sources. PLCY governs RAG pipelines like any other AI request — both the retrieved context and the prompt are subject to policy enforcement.  
+_Where:_ Governed like any AI request.  ·  _See also:_ Data plane, Data classification
+
+**Redis / ElastiCache**  
+An in-memory data store used for caching and fast lookups. Managed via Amazon ElastiCache for Redis in the customer VPC.  
+_Where:_ Architecture diagram.  ·  _See also:_ Cache-hit discount
+
+**SaaS** — _Software as a Service_  
+Software delivered as a hosted, multi-tenant service rather than installed by the customer. PLCY’s control plane is SaaS; the data plane is customer-hosted.
+
+**Service mesh**  
+An infrastructure layer that manages pod-to-pod traffic (routing, security, observability) transparently via sidecars, so services don’t implement it themselves.  
+_Where:_ Architecture diagram.  ·  _See also:_ Sidecar
+
+**Sidecar**  
+A helper container that runs alongside an application container in the same pod. PLCY ships OPA and OTel sidecars with every app pod to enforce policy and emit telemetry.  
+_Where:_ Architecture diagram.  ·  _See also:_ OPA, OTel, Service mesh
+
+**Sovereign Cloud**  
+A deployment pinned to a specific jurisdiction’s infrastructure to satisfy data-sovereignty requirements.  
+_Where:_ Regions; Residency Controls.  ·  _See also:_ Residency, Air-gapped
+
+**Throughput tier**  
+A named performance band on a plan (Standard / High / Burst / Dedicated) that sets sustained request throughput; higher tiers carry a price uplift.  
+_Where:_ Pricing → Plans / Quote.
+
+**VPC** — _Virtual Private Cloud_  
+An isolated private network within a cloud provider. PLCY’s data plane typically runs inside the customer’s own VPC.  
+_Where:_ Deployment models doc; Architecture diagram.
+
+## Security & Access
+
+**API key**  
+A credential for programmatic access, issued with least-privilege scopes (read / write / deploy / admin), a creation date, and last-used time; rotated from Admin Security.  
+_Where:_ Admin Security → API Keys; API-keys doc.
+
+**Audit log**  
+The immutable record of every action taken in the console (who, what, when, target), for accountability and investigations.  
+_Where:_ Audit Log.
+
+**Break-glass**  
+Emergency elevated access that is time-boxed and fully audited, used only when normal access is insufficient.  
+_Where:_ Privileged Access.  ·  _See also:_ Capability
+
+**Capability**  
+A single named permission (e.g. policy.manage, provision.manage, settings.modify). If the acting role lacks it, the action is disabled with a lock affordance.  
+_Where:_ Throughout; access matrix in Settings.  ·  _See also:_ RBAC
+
+**Device ID**  
+A hardware-bound identifier (Hardware UUID + motherboard serial) a managed device reports to prove it’s the same machine. A stable identifier, not a secret — the MDM attestation and VPN gate are the anti-spoofing anchors.  
+_Where:_ Managed devices panel.  ·  _See also:_ Device trust, MDM
+
+**Device trust**  
+Only letting known, healthy devices reach the console. Enrolled devices report a hardware-bound Device ID and pass a posture check on each check-in.  
+_Where:_ Settings → Security → Managed devices; Device-trust doc.  ·  _See also:_ Device ID, MDM, Posture score
+
+**HSM** — _Hardware Security Module_  
+A tamper-resistant device that stores and manages encryption keys. Available for customer-managed keys (BYOK/HSM) at rest.  
+_Where:_ Settings → Security (data protection).
+
+**IdP** — _Identity Provider_  
+The system of record for identity (e.g. Okta) that authenticates users and asserts who they are to applications.  
+_Where:_ Admin Security; Settings → Security.  ·  _See also:_ SSO, SAML, SCIM
+
+**IP allowlist**  
+A list of network ranges permitted to reach the console. When enforced, requests from other addresses are blocked — a high-weight posture control.  
+_Where:_ Settings → Security (network).  ·  _See also:_ Posture score
+
+**MDM** — _Mobile Device Management_  
+A system that enrolls and manages endpoints, enforcing settings like disk encryption and screen lock. MDM enrollment is one of the device posture checks.  
+_Where:_ Managed devices (posture checks).  ·  _See also:_ Device trust
+
+**MFA** — _Multi-Factor Authentication_  
+Requiring more than a password to sign in (e.g. an authenticator or passkey). Required for every admin; phishing-resistant factors are preferred.  
+_Where:_ Settings → Security; Admin Security.  ·  _See also:_ Passkey, SSO
+
+**Passkey**  
+A phishing-resistant, cryptographic sign-in credential (WebAuthn/FIDO2) that replaces passwords. Preferred over SMS or app codes.  
+_Where:_ Settings → Security (authentication factors).  ·  _See also:_ MFA
+
+**Posture score**  
+A live 0–100, RAG-rated measure of how hardened the org security policy is, weighted by control. It reacts as you change controls and surfaces the highest-weight gaps first.  
+_Where:_ Settings → Security; Admin Security; Fleet Posture.  ·  _See also:_ RAG
+
+**RBAC** — _Role-Based Access Control_  
+Access model where permissions attach to roles and roles to users. Every privileged action in the console checks a capability the acting role must hold.  
+_Where:_ Settings → Roles & Permissions; Access-control doc.  ·  _See also:_ Capability
+
+**SAML** — _Security Assertion Markup Language_  
+The XML-based standard used for browser SSO between an identity provider and an application. PLCY’s SSO uses SAML 2.0.  
+_Where:_ Admin Security (Okta SAML 2.0).  ·  _See also:_ SSO, IdP
+
+**SCIM** — _System for Cross-domain Identity Management_  
+A standard for auto-provisioning and de-provisioning user accounts from an identity provider, so joiners/leavers sync automatically.  
+_Where:_ Settings → Security (auto-provision).  ·  _See also:_ SSO, IdP
+
+**SSO** — _Single Sign-On_  
+Signing in through a central identity provider instead of a local password. When enforced, local password login is disabled.  
+_Where:_ Settings → Security; Admin Security.  ·  _See also:_ SAML, IdP, SCIM
+
+## Billing & Pricing
+
+**Add-on**  
+An optional priced item on top of a plan, billed per unit or as a discounted bulk pack. Overages are charged at the cheaper of unit vs pack.  
+_Where:_ Pricing → Add-ons / Quote.  ·  _See also:_ Overage
+
+**Cache-hit discount**  
+A reduction applied because a request was served from cache rather than re-evaluated, lowering the billable request count.  
+_Where:_ Pricing → Quote.  ·  _See also:_ Redis / ElastiCache, Overage
+
+**Dispute**  
+A customer-initiated chargeback contesting a charge with their card network. Disputes route to on-call as a billing signal.  
+_Where:_ Billing Health; Notifications.  ·  _See also:_ Dunning
+
+**Dunning**  
+The automated retry-and-remind process after a payment fails, escalating toward suspension if unresolved. Dunning events route to Notifications.  
+_Where:_ Billing Health; Notifications.  ·  _See also:_ Dispute
+
+**Entitlement**  
+A capability a plan grants, usually a yes/no toggle (SSO, SCIM, immutable logs, advanced reporting, HITL, Bedrock, custom models).  
+_Where:_ Pricing → Plans / Quote.
+
+**FinOps**  
+Cost & margin management — attributing infrastructure cost to revenue to see per-customer profitability.  
+_Where:_ Cost & Margin; FinOps report.
+
+**Governed request**  
+A single AI request evaluated by PLCY, counted at PLCY ingress. The core usage unit for capacity and overage.  
+_Where:_ Pricing → Quote (Demand).  ·  _See also:_ Overage
+
+**MRR** — _Monthly Recurring Revenue_  
+The predictable subscription revenue billed each month. Plan cards show customers on a plan and their MRR; a customer’s Billing tab shows list-vs-actual MRR.  
+_Where:_ Pricing; Customer → Billing; Dashboard.
+
+**Overage**  
+Usage beyond what a plan includes, billed at the add-on rate (cheaper of unit price vs bulk pack). Cache hits reduce billable requests first.  
+_Where:_ Pricing → Quote.  ·  _See also:_ Add-on, Governed request, Cache-hit discount
+
+**Quote builder**  
+The live pricing tool: pick a plan, cadence, and term; set demand and options; and export an order form. Reconciles to customers and Stripe MRR.  
+_Where:_ Pricing → Quote; Pricing doc.
+
+## Compliance & Privacy
+
+**Data classification**  
+Labelling data by sensitivity (e.g. public, internal, confidential, PII) so policy can treat each level appropriately.  
+_Where:_ Data Classification.  ·  _See also:_ PII
+
+**DSAR** — _Data Subject Access Request_  
+A request by an individual to access, export, or delete their personal data, tracked against a statutory deadline (e.g. GDPR).  
+_Where:_ Data Requests; DSAR Fulfilment report; Incidents-DSAR doc.  ·  _See also:_ GDPR, PII
+
+**EU AI Act**  
+The EU regulation classifying AI systems by risk and imposing obligations on higher-risk uses. PLCY packs map controls to it.  
+_Where:_ Policy Packs; Compliance Reporting.
+
+**GDPR** — _General Data Protection Regulation_  
+The EU data-protection law governing personal-data processing, consent, transfers, and data-subject rights (including DSARs).  
+_Where:_ Compliance Reporting; Residency.  ·  _See also:_ DSAR, Residency
+
+**HIPAA** — _Health Insurance Portability and Accountability Act_  
+The US law protecting health information (PHI). A vertical PLCY Pack pre-configures controls for HIPAA/healthcare.  
+_Where:_ Policy Packs; Compliance Reporting.
+
+**ISO 27001 / 42001**  
+International standards for an information-security management system (27001) and an AI management system (42001).  
+_Where:_ Compliance Reporting.
+
+**PII** — _Personally Identifiable Information_  
+Data that identifies a person. Detecting and controlling PII in AI traffic is a core enforcement job; a PII leak is a governance incident.  
+_Where:_ Data Classification; Incidents.  ·  _See also:_ Data classification
+
+**Residency**  
+The requirement that data stay in a chosen jurisdiction. Region selection pins data; cross-border movement is governed on Data Transfers.  
+_Where:_ Residency Controls; Data Transfers; Regions.  ·  _See also:_ Sovereign Cloud, Sub-processor
+
+**SOC 2**  
+An audit framework attesting controls for security, availability, confidentiality, processing integrity, and privacy.  
+_Where:_ Compliance Reporting; Compliance Attestation report.
+
+**Sub-processor**  
+A third party that processes customer data on PLCY’s behalf. Sub-processors are tracked and disclosed for compliance.  
+_Where:_ Sub-processors.  ·  _See also:_ Residency
+
+## Operations & Fleet
+
+**CVE** — _Common Vulnerabilities and Exposures_  
+A publicly catalogued security vulnerability, referenced by ID. Critical CVEs on a running image trigger a re-scan or quarantine.  
+_Where:_ Supply Chain; Dashboard.  ·  _See also:_ SBOM
+
+**DR** — _Disaster Recovery_  
+The plan and tooling to restore service and data after a major failure — backups, restore drills, and recovery targets.  
+_Where:_ Backups & DR.
+
+**Drift**  
+When a cluster is not running what it should — an image behind the promoted tag, or infrastructure that differs from Terraform.  
+_Where:_ Fleet Posture; Cluster Health.  ·  _See also:_ Terraform drift
+
+**Enforcement mode**  
+How a policy acts on a matching request: Monitor (log only), Warn (flag/annotate), or Block (stop before sensitive data leaves).  
+_Where:_ Enforcement Controls; Policy Editor.  ·  _See also:_ Policy pack
+
+**Escalation**  
+The path a signal follows if the first responder doesn’t acknowledge — up to Secondary, then Manager.  
+_Where:_ Notifications.  ·  _See also:_ On-call
+
+**Incident**  
+A logged AI-governance event with severity, status, owner, timeline, root cause, and remediation; rolled up in the Post-Mortem report with the obligations it triggers.  
+_Where:_ Incident Management; Incident report.  ·  _See also:_ DSAR
+
+**Licensing**  
+The entitlement and seat/usage limits granted to a customer’s deployment, tracked and enforced per tenant.  
+_Where:_ Licensing.
+
+**Maintenance window**  
+A scheduled period for changes (upgrades, region moves) with customer notice, so disruption is expected and bounded.  
+_Where:_ SLA & Maintenance; Provisioning.  ·  _See also:_ Provisioning change-request
+
+**Observability**  
+Seeing what the system is doing from its telemetry (metrics, traces, logs). PLCY exports evidence and traces via OTel to CloudWatch, X-Ray, and Prometheus/Grafana.  
+_Where:_ Observability.  ·  _See also:_ OTel
+
+**On-call**  
+The responder currently responsible for incidents. The Primary drives every routed signal; roles are Primary / Secondary / Manager.  
+_Where:_ Notifications; Notifications-on-call doc.  ·  _See also:_ Rotation, Escalation, PagerDuty
+
+**PagerDuty**  
+The paging tool that routes urgent signals to the on-call responder’s phone. PLCY signals feed it via routing rules.  
+_Where:_ Notifications.  ·  _See also:_ On-call
+
+**Policy pack**  
+A composable governance bundle: Controls (atomic checks) ⊂ Primitives (grouped controls) ⊂ Composite packs (deployable, market-ready — e.g. HIPAA, Financial Services).  
+_Where:_ Policy Packs; Policy-packs doc.  ·  _See also:_ Enforcement mode
+
+**Provisioning change-request**  
+A tracked request to change a deployment (region, size, connectivity) that’s reviewed and scheduled into a maintenance window.  
+_Where:_ Provisioning; Customer detail.  ·  _See also:_ Maintenance window
+
+**PSA** — _Pod Security Admission_  
+The Kubernetes control that enforces pod-security standards per namespace (privileged / baseline / restricted), in enforce/audit/warn modes.  
+_Where:_ Fleet Posture; Cluster guardrails.  ·  _See also:_ EKS
+
+**Quota pressure**  
+How close a namespace is to its CPU / memory / pod limits. "Hot" means at or above 90% and at risk of hitting the ceiling.  
+_Where:_ Fleet Posture.
+
+**RAG** — _Red / Amber / Green_  
+The status language used throughout the console: green = healthy, amber/orange = warning, red = danger. (Not to be confused with Retrieval-Augmented Generation.)  
+_Where:_ Everywhere (status badges).  ·  _See also:_ Posture score
+
+**Rotation**  
+The schedule that moves on-call responsibility between people over time. "Make current" applies a week to the live assignment.  
+_Where:_ Notifications (Upcoming Rotation).  ·  _See also:_ On-call
+
+**SBOM** — _Software Bill of Materials_  
+An inventory of every component in a build, used to trace vulnerabilities and provenance across the supply chain.  
+_Where:_ Supply Chain.  ·  _See also:_ CVE
+
+**SLA** — _Service Level Agreement_  
+A committed service target (e.g. uptime). Missing it can trigger service credits.  
+_Where:_ SLA & Maintenance; SLA report.  ·  _See also:_ SLA credit
+
+**SLA credit**  
+A billing credit owed to a customer when an SLA target is breached.  
+_Where:_ SLA & Maintenance; Dashboard.  ·  _See also:_ SLA
+
+**Terraform**  
+HashiCorp’s infrastructure-as-code (IaC) tool: cloud infrastructure is declared in configuration and applied reproducibly, rather than changed by hand. PLCY tracks when a cluster’s real infrastructure drifts from its Terraform definition.  
+_Where:_ Fleet Posture (drift); Provisioning.  ·  _See also:_ Terraform drift, Drift
+
+**Terraform drift** — _TF drift_  
+Infrastructure that no longer matches its Terraform definition, shown as a count of drifted resources.  
+_Where:_ Fleet Posture (TF · N res).  ·  _See also:_ Terraform, Drift

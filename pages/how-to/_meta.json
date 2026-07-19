@@ -1,0 +1,13 @@
+{
+  "howto-onboard-customer": "Onboard a new customer",
+  "howto-build-quote": "Build and export a quote",
+  "howto-change-deployment": "Change a deployment (region or size)",
+  "howto-enroll-device": "Enroll a managed device",
+  "howto-rotate-api-key": "Rotate an API key",
+  "howto-handle-dsar": "Handle a data-subject request (DSAR)",
+  "howto-incident-postmortem": "Triage an incident & produce a post-mortem",
+  "howto-billing-signal": "Respond to a billing signal",
+  "howto-edit-oncall": "Edit on-call & rotation",
+  "howto-generate-report": "Generate & export a report",
+  "howto-raise-posture": "Raise the security posture score"
+}

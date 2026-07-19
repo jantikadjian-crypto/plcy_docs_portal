@@ -1,0 +1,28 @@
+---
+title: "Access control (RBAC)"
+category: "Policies"
+type: "Document"
+audience: public
+updated: "2026-07-15"
+tags: ["rbac", "roles", "permissions", "access", "least privilege", "audit"]
+---
+
+# Access control (RBAC)
+
+_Roles, capabilities, and how the console gates privileged actions._
+
+Access is capability-based. Every privileged action checks a capability (e.g. policy.manage, provision.manage, license.manage, settings.modify); the acting role either holds it or the action is disabled with a lock affordance.
+
+## Administering roles
+
+- Settings → Roles & Permissions holds the production access matrix; click a cell to grant or revoke.
+
+- Superuser holds every permission; changes are captured in a permission change log.
+
+- Break-glass / privileged access is time-boxed and audited on the Privileged Access page.
+
+Every action across the console is recorded to the Audit Log for accountability.
+
+---
+
+Tags: `rbac` `roles` `permissions` `access` `least privilege` `audit`

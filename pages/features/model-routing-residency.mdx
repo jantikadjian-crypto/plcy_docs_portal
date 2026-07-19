@@ -1,0 +1,32 @@
+---
+title: "Model routing & data residency"
+category: "Features"
+type: "Document"
+audience: customer
+updated: "2026-07-17"
+tags: ["model routing", "residency", "sovereignty", "region", "transfers", "gdpr", "sub-processor"]
+---
+
+# Model routing & data residency
+
+_How requests are routed to the right model and region to honour residency and cost._
+
+Model routing decides which model and which region an AI request is sent to. It exists to satisfy three pressures at once: data residency, cost, and model capability — without the calling application having to know the difference.
+
+## Routing levers
+
+- Model Routing — rules that select a model/provider per request (e.g. by workload, sensitivity, or capability).
+
+- Regions — region selection pins where data is processed; Sovereign Cloud and air-gapped options exist for strict requirements.
+
+- Residency Controls & Data Transfers — govern where data may live and how cross-border movement is handled.
+
+- Sub-processors — the third parties in the path, tracked and disclosed for compliance.
+
+## Residency in practice
+
+A request from an EU tenant can be pinned to an EU region and an in-region model, with any cross-border transfer explicitly governed rather than implicit. Because model access is BYOK by default, routing can also keep inference inside the customer’s own account and jurisdiction.
+
+---
+
+Tags: `model routing` `residency` `sovereignty` `region` `transfers` `gdpr` `sub-processor`

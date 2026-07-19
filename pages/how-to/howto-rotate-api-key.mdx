@@ -1,0 +1,34 @@
+---
+title: "Rotate an API key"
+category: "How-to"
+type: "Guide"
+audience: internal
+updated: "2026-07-14"
+tags: ["api", "key", "rotate", "credential", "secret", "security"]
+---
+
+# Rotate an API key
+
+_Issue a fresh credential and retire the old one without downtime._
+
+Rotating replaces a key’s secret. The secret is shown once — capture it before leaving the screen. You need the settings.modify capability.
+
+## Steps
+
+1. Open Admin Security and find the key in the API Keys table.
+
+2. Click Rotate to generate a new secret for the same name and scopes.
+
+3. Copy the new secret immediately — it is displayed only once.
+
+4. Update the consuming system (CI, webhook, integration) with the new secret.
+
+5. Confirm traffic resumes and the key’s “last used” updates.
+
+6. Revoke or let the old secret expire once nothing depends on it.
+
+Tip: keep tokens least-privilege — issue read-only keys for exports and reserve write/admin scopes for systems that need them.
+
+---
+
+Tags: `api` `key` `rotate` `credential` `secret` `security`

@@ -1,0 +1,30 @@
+---
+title: "Notifications & on-call"
+category: "System Usage"
+type: "Document"
+audience: internal
+updated: "2026-07-16"
+tags: ["notifications", "on-call", "routing", "pagerduty", "escalation", "alerts"]
+---
+
+# Notifications & on-call
+
+_How live signals route to channels and page the on-call responder._
+
+The Notifications page runs every live fleet signal through your routing rules so you can see exactly who gets notified — and which signals fall through the cracks (no rule, rule disabled, or below its severity floor).
+
+## Editing on-call
+
+- On-Call card → Edit reassigns Primary / Secondary / Manager from the team roster.
+
+- The Primary responder drives every PagerDuty-routed signal and the "On-call now" tile.
+
+- Upcoming Rotation is editable; "Make current" applies a week to the live assignment.
+
+## Signals
+
+Cluster, supply-chain, SLA, billing (dunning, failed payments, disputes), and device-trust events all feed the router. Add a routing rule to close any coverage gap.
+
+---
+
+Tags: `notifications` `on-call` `routing` `pagerduty` `escalation` `alerts`

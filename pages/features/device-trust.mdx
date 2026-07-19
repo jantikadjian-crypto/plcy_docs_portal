@@ -1,0 +1,28 @@
+---
+title: "Device trust & enrollment"
+category: "Features"
+type: "Document"
+audience: customer
+updated: "2026-07-16"
+tags: ["device", "enrollment", "mdm", "posture", "vpn", "byok", "security"]
+---
+
+# Device trust & enrollment
+
+_Enroll managed devices with a hardware-bound ID, VPN, and posture checks._
+
+Settings → Security → Managed devices governs which devices may reach the console. Enrolling a device issues a one-time code (with QR + install command); on check-in the device reports a hardware-bound Device ID (Hardware UUID + motherboard serial) and passes a posture check.
+
+## Posture checks
+
+- Disk encryption, current OS, screen lock, not jailbroken, MDM-enrolled, and connected via company VPN.
+
+- A device passing all checks is Trusted; a drifted device is At risk; a non-compliant device is Blocked.
+
+- When "Require managed devices" is on, only Trusted devices can access the console.
+
+A plaintext hardware fingerprint is a stable identifier, not a secret — the certificate/MDM attestation and the VPN gate are the real anti-spoofing anchors.
+
+---
+
+Tags: `device` `enrollment` `mdm` `posture` `vpn` `byok` `security`

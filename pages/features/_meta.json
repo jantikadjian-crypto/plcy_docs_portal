@@ -1,0 +1,10 @@
+{
+  "pricing-quotes": "Pricing & the quote builder",
+  "device-trust": "Device trust & enrollment",
+  "security-posture": "Security policy & posture score",
+  "policy-packs": "Policy packs & enforcement",
+  "incidents-dsar": "Incidents & data requests (DSAR)",
+  "observability-loop": "The configure → observe loop",
+  "model-routing-residency": "Model routing & data residency",
+  "licensing": "Licensing & entitlements"
+}

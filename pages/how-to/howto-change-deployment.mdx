@@ -1,0 +1,32 @@
+---
+title: "Change a deployment (region or size)"
+category: "How-to"
+type: "Guide"
+audience: internal
+updated: "2026-07-16"
+tags: ["provisioning", "deployment", "region", "size", "maintenance", "change-request"]
+---
+
+# Change a deployment (region or size)
+
+_Raise a provisioning change-request and schedule it into a maintenance window._
+
+Region, size, and connectivity changes are handled as reviewed change-requests scheduled into a maintenance window — never applied ad hoc. You need the provision.manage capability.
+
+## Steps
+
+1. Open the customer (or Provisioning) and start a configuration change-request.
+
+2. Choose the target — new region, size tier (Small / Medium / Large), or connectivity.
+
+3. Submit the request; it enters the review queue with a diff of what changes.
+
+4. Review and approve the change-request.
+
+5. Schedule it into a maintenance window on SLA & Maintenance so the customer has notice.
+
+6. The change executes in the window; confirm the deployment reflects the new config afterward.
+
+---
+
+Tags: `provisioning` `deployment` `region` `size` `maintenance` `change-request`
