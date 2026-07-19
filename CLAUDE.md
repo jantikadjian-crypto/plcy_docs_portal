@@ -28,13 +28,18 @@ Stack: Next.js 13 · Nextra 2 (`nextra-theme-docs`) · MDX · React 18.
 
 ## Repository layout
 
-- `pages/` — all content as MDX, one folder per section:
-  - `system-usage/`, `how-to/`, `technical/`, `features/`, `policies/`
+- `pages/` — the **published** site (publishable content only), one folder per
+  section: `technical/`, `features/`, `policies/`.
   - `index.mdx` — the home page; `glossary.mdx` — the full term glossary.
   - Each section folder has a `_meta.json` controlling **sidebar order + labels**.
     The top-level `pages/_meta.json` controls the section order.
+- `content-internal/` — **internal-only** sections (`system-usage/`, `how-to/`),
+  kept OUTSIDE the Next build so they never ship. Preview locally with
+  `npm run dev:internal`. See `AUDIENCE.md`.
 - `public/diagrams/` — `architecture.svg`, `network-topology.svg` (referenced
   from the Technical articles as `![](/diagrams/<file>.svg)`).
+- `scripts/apply-audience.mjs` — pre-`dev`/`build` hook that enforces the gate
+  (excludes internal by default; copies it in for `dev:internal`).
 - `theme.config.jsx` — Nextra theme config. Light forced via `darkMode:false` +
   `nextThemes:{defaultTheme:'light',forcedTheme:'light'}`. Logo, footer, search
   placeholder, primary hue live here.
@@ -42,23 +47,23 @@ Stack: Next.js 13 · Nextra 2 (`nextra-theme-docs`) · MDX · React 18.
 
 ## Authoring content
 
-- Add an article: create `pages/<section>/<slug>.mdx`, then add its
+- Add a **published** article: create `pages/<section>/<slug>.mdx`, then add its
   `slug: "Sidebar Title"` entry to that section's `_meta.json`.
 - Every article carries frontmatter: `title`, `category`, `type`, `audience`,
   `updated`, `tags`.
-- **`audience:` gating (important).** Values are `public`, `customer`, or
-  `internal`. Content seeded from *System Usage* and *How-to* is tagged
-  `internal` as a best guess. Nextra does **not** gate by audience out of the
-  box. **Before making this site public, review every `internal` page** and
-  either remove it, rewrite it for the intended audience, or put it behind auth
-  / split it into a separate build. Treat `internal` as "do not publish yet".
+- **`audience:` gating (read `AUDIENCE.md`).** Values are `public`, `customer`,
+  `internal`. The gate is **structural**: `pages/` = `public` + `customer` only
+  (always safe to deploy); `internal` lives in `content-internal/`, outside the
+  build. To promote/demote a page, `git mv` it between the two trees and update
+  the relevant `_meta.json` — never leave `internal`-tagged files under `pages/`.
 
 ## Commands
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # static production build (verify before shipping)
+npm run dev            # http://localhost:3000  (public site)
+npm run build          # static production build (public — safe to deploy)
+npm run dev:internal   # public site + internal guides, local review only
 ```
 
 ## Ship checklist (for the assistant)
