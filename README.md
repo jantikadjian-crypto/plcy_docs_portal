@@ -20,22 +20,6 @@ npm run build          # production build (public — safe to deploy)
 npm run dev:internal   # public site + internal guides, for local review only
 ```
 
-## Deploy (Vercel)
-This repo is Vercel-ready — `vercel.json` pins the framework and build command so the
-audience gate runs on every deploy.
-
-1. Sign in at [vercel.com](https://vercel.com) with your GitHub account.
-2. **Add New → Project**, then **Import** `jantikadjian-crypto/plcy_docs_portal`
-   (authorize Vercel for the repo if prompted — it works with private repos).
-3. Vercel auto-detects Next.js. Leave the defaults (build `npm run build`,
-   output handled automatically) and click **Deploy**.
-4. You get a live URL (e.g. `plcy-docs-portal.vercel.app`). Every push to `main`
-   redeploys automatically; pull requests get preview URLs.
-
-The deployed site is the **public build** — `internal` guides are excluded, so the
-URL is safe to share. The Vercel URL is publicly reachable by default; for a private
-site or a custom domain, configure it in the Vercel project settings.
-
 ## Authoring
 Published content is plain **MDX** in `pages/<section>/<slug>.mdx`. Section order
 and sidebar labels live in each `_meta.json`. Edit in Git (PR review) or wire up a
