@@ -5,6 +5,7 @@ type: "Graphic"
 audience: public
 updated: "2026-07-17"
 tags: ["network", "vpc", "eks", "kubernetes", "alb", "opa", "otel", "sidecar", "redis", "s3", "observability", "topology"]
+description: "How the PLCY data plane runs inside a customer VPC — load balancing, EKS pods, sidecars, data stores, and observability."
 ---
 
 # Network & deployment topology
@@ -13,7 +14,7 @@ _How the PLCY data plane runs inside a customer VPC — load balancing, EKS pods
 
 The PLCY data plane deploys into the customer’s own AWS VPC. Traffic enters through an Application Load Balancer, is routed by ingress rules to the PLCY gateway pod, and every request is governed in-line by an OPA sidecar before reaching model or backend services. Telemetry is exported via OpenTelemetry to the customer’s observability backend.
 
-![network-topology.svg](/diagrams/network-topology.svg)
+![PLCY network and deployment topology — the data plane inside a customer AWS VPC: Application Load Balancer, ingress routing to the PLCY gateway pod, in-line OPA sidecar policy checks, and OpenTelemetry export to the customer's observability backend.](/diagrams/network-topology.svg)
 
 ## Request path
 
