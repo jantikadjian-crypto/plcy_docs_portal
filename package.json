@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/apply-audience.mjs",
+    "predev": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/apply-audience.mjs",
+    "prebuild": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs",
     "build": "next build",
     "start": "next start",
-    "dev:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && next dev",
-    "build:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && next build"
+    "search:index": "node scripts/build-search-index.mjs",
+    "dev:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && next dev",
+    "build:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && next build"
   },
   "dependencies": {
     "next": "^13.5.6",

@@ -40,6 +40,17 @@ Stack: Next.js 13 · Nextra 2 (`nextra-theme-docs`) · MDX · React 18.
   from the Technical articles as `![](/diagrams/<file>.svg)`).
 - `scripts/apply-audience.mjs` — pre-`dev`/`build` hook that enforces the gate
   (excludes internal by default; copies it in for `dev:internal`).
+- `scripts/build-search-index.mjs` — pre-`dev`/`build` hook that walks `pages/`
+  and writes `public/search-index.json` (git-ignored, regenerated every build).
+  It skips the internal sections **by name**, so an internal preview can never
+  leak into the index.
+- `lib/search.js` — the client-side query engine (load / rank / snippet /
+  highlight), shared by both search surfaces so they rank identically.
+- `components/HeaderSearch.jsx` — the navbar search box (top 5 hits inline,
+  Enter → full results). Wired in via `search.component` in `theme.config.jsx`,
+  replacing Nextra's built-in FlexSearch box.
+- `components/SearchResults.jsx` + `pages/search.mdx` — the `/search?q=…`
+  results page. Hidden from the sidebar via `pages/_meta.json`.
 - `theme.config.jsx` — Nextra theme config. Light forced via `darkMode:false` +
   `nextThemes:{defaultTheme:'light',forcedTheme:'light'}`. Logo, footer, search
   placeholder, primary hue live here.

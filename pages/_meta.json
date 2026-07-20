@@ -3,5 +3,10 @@
   "technical": "Technical",
   "features": "Features",
   "policies": "Policies",
-  "glossary": "Glossary"
+  "glossary": "Glossary",
+  "search": {
+    "title": "Search",
+    "display": "hidden",
+    "theme": { "sidebar": false, "toc": false, "breadcrumb": false }
+  }
 }
