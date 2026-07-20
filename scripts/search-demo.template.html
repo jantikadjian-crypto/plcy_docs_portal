@@ -1,0 +1,492 @@
+<title>PLCY Docs Search</title>
+
+<style>
+  /* Palette carried over from theme.config.jsx so the demo and the real portal
+     read as one system. The portal itself is light-only by design; this page
+     also answers to the viewer's theme, because it renders inside someone
+     else's chrome rather than its own site. */
+  :root {
+    --ground: #ffffff;
+    --raised: #f7f8fa;
+    --ink: #111827;
+    --muted: #5b6472;
+    --faint: #8b95a3;
+    --hairline: rgba(17, 24, 39, 0.09);
+    --accent: #1f6fd0;
+    --accent-soft: #eff5fd;
+    --mark-bg: #fef3c7;
+    --mark-ink: #4a3a10;
+    --shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0f1319;
+      --raised: #161c25;
+      --ink: #e6eaf1;
+      --muted: #98a3b3;
+      --faint: #6b7686;
+      --hairline: rgba(230, 234, 241, 0.11);
+      --accent: #7db0f2;
+      --accent-soft: #16233a;
+      --mark-bg: #4a3d16;
+      --mark-ink: #fdf1cf;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  /* The viewer's own toggle must win over the OS preference, both directions. */
+  :root[data-theme="light"] {
+    --ground: #ffffff;
+    --raised: #f7f8fa;
+    --ink: #111827;
+    --muted: #5b6472;
+    --faint: #8b95a3;
+    --hairline: rgba(17, 24, 39, 0.09);
+    --accent: #1f6fd0;
+    --accent-soft: #eff5fd;
+    --mark-bg: #fef3c7;
+    --mark-ink: #4a3a10;
+    --shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0f1319;
+    --raised: #161c25;
+    --ink: #e6eaf1;
+    --muted: #98a3b3;
+    --faint: #6b7686;
+    --hairline: rgba(230, 234, 241, 0.11);
+    --accent: #7db0f2;
+    --accent-soft: #16233a;
+    --mark-bg: #4a3d16;
+    --mark-ink: #fdf1cf;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ---- Masthead ---- */
+  .masthead { display: flex; flex-direction: column; gap: 0.5rem; }
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 40rem; color: var(--muted); font-size: 0.9375rem; }
+  .lede code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85em;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    background: var(--raised);
+  }
+
+  /* ---- Search bar ---- */
+  .searchbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 0.75rem 0;
+    background: var(--ground);
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .field { position: relative; display: flex; align-items: center; }
+  .field svg {
+    position: absolute;
+    left: 0.85rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--faint);
+    pointer-events: none;
+  }
+  #q {
+    width: 100%;
+    padding: 0.7rem 0.9rem 0.7rem 2.5rem;
+    border: 1px solid var(--hairline);
+    border-radius: 0.6rem;
+    background: var(--raised);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+    outline: none;
+  }
+  #q::placeholder { color: var(--faint); }
+  #q:focus-visible {
+    border-color: var(--accent);
+    background: var(--ground);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  .kbd {
+    position: absolute;
+    right: 0.7rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.6875rem;
+    color: var(--faint);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    pointer-events: none;
+  }
+
+  /* Example queries double as a map of what the corpus actually covers. */
+  .examples { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+  .examples-label { font-size: 0.75rem; color: var(--faint); margin-right: 0.15rem; }
+  .chip {
+    border: 1px solid var(--hairline);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .count {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Results ---- */
+  .results { list-style: none; margin: 0; padding: 0; }
+  .result { border-top: 1px solid var(--hairline); }
+  .result:last-child { border-bottom: 1px solid var(--hairline); }
+
+  .row {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    padding: 0.95rem 0.5rem;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 0.4rem;
+  }
+  .row:hover, .result.is-active .row { background: var(--accent-soft); }
+  .row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+  .meta { display: flex; align-items: baseline; gap: 0.6rem; flex: none; }
+  .section {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .score {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--faint);
+  }
+  .snippet {
+    margin: 0.3rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .headings {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+  }
+  .headings li {
+    font-size: 0.75rem;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-radius: 0.35rem;
+    padding: 0.1rem 0.45rem;
+  }
+
+  /* Expanded body: the demo has no pages to navigate to, so the indexed text
+     is revealed in place instead of pretending to link somewhere. */
+  .body {
+    padding: 0 0.5rem 1.1rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+    margin: 0 0 0 0.5rem;
+    padding-left: 0.85rem;
+  }
+  .body p { margin: 0; }
+  .body .route {
+    display: block;
+    margin-top: 0.6rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--faint);
+  }
+
+  mark {
+    background: var(--mark-bg);
+    color: var(--mark-ink);
+    border-radius: 2px;
+    padding: 0 0.1em;
+  }
+
+  .empty { color: var(--muted); font-size: 0.9375rem; }
+  .empty strong { color: var(--ink); font-weight: 600; }
+
+  .footnote {
+    margin: 0;
+    padding-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--faint);
+    border-top: 1px solid var(--hairline);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .row { transition: background 0.12s ease; }
+    .chip { transition: color 0.12s ease, border-color 0.12s ease; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="eyebrow">PLCY Documentation Portal</span>
+    <h1>Search, running on the real index</h1>
+    <p class="lede">
+      The same ranking code and the same 19-page corpus as the portal's
+      <code>/search</code> page, inlined into one file. Titles outrank headings,
+      which outrank body text; every term has to match somewhere. Pick a result
+      to read the indexed text behind it.
+    </p>
+  </header>
+
+  <div class="searchbar">
+    <div class="field">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <circle cx="9" cy="9" r="6"></circle>
+        <path d="M13.5 13.5 17 17" stroke-linecap="round"></path>
+      </svg>
+      <input id="q" type="search" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off" autofocus>
+      <span class="kbd" id="kbd">/</span>
+    </div>
+    <div class="examples">
+      <span class="examples-label">Try</span>
+      <button class="chip" type="button">policy pack</button>
+      <button class="chip" type="button">BYOK</button>
+      <button class="chip" type="button">residency</button>
+      <button class="chip" type="button">DSAR</button>
+      <button class="chip" type="button">posture score</button>
+    </div>
+  </div>
+
+  <p class="count" id="count" role="status" aria-live="polite"></p>
+  <ol class="results" id="results"></ol>
+  <p class="empty" id="empty" hidden></p>
+
+  <p class="footnote">
+    Static preview — the corpus is frozen at build time. On the live portal each
+    result links through to its page and the same engine backs the navbar box.
+  </p>
+</div>
+
+<script>
+/*__ENGINE__*/
+
+const INDEX = /*__INDEX__*/;
+const docs = INDEX.docs;
+
+const qEl = document.getElementById('q');
+const listEl = document.getElementById('results');
+const countEl = document.getElementById('count');
+const emptyEl = document.getElementById('empty');
+
+let expanded = null; // route of the open result, if any
+
+function markup(text, terms) {
+  // highlight() returns [text, isMatch] runs, so nothing from the index is ever
+  // interpreted as HTML.
+  const frag = document.createDocumentFragment();
+  for (const [chunk, hit] of highlight(text, terms)) {
+    if (hit) {
+      const m = document.createElement('mark');
+      m.textContent = chunk;
+      frag.appendChild(m);
+    } else {
+      frag.appendChild(document.createTextNode(chunk));
+    }
+  }
+  return frag;
+}
+
+function render() {
+  const query = qEl.value;
+  const terms = tokenize(query);
+  const results = search(docs, query);
+
+  listEl.textContent = '';
+
+  if (!query.trim()) {
+    countEl.textContent = docs.length + ' pages indexed.';
+    emptyEl.hidden = false;
+    emptyEl.innerHTML = 'Type a term above, or pick one of the examples.';
+    return;
+  }
+
+  countEl.textContent = results.length
+    ? results.length + (results.length === 1 ? ' result' : ' results') + ' for “' + query.trim() + '”'
+    : '';
+
+  if (!results.length) {
+    emptyEl.hidden = false;
+    emptyEl.textContent = '';
+    emptyEl.append('No page matches every term in ');
+    const s = document.createElement('strong');
+    s.textContent = '“' + query.trim() + '”';
+    emptyEl.append(s, '. Try one term, or a broader one.');
+    return;
+  }
+  emptyEl.hidden = true;
+
+  for (const { doc, score, snippet, headings } of results) {
+    const li = document.createElement('li');
+    li.className = 'result';
+
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'row';
+    row.setAttribute('aria-expanded', String(expanded === doc.route));
+
+    const head = document.createElement('div');
+    head.className = 'row-head';
+
+    const title = document.createElement('span');
+    title.className = 'title';
+    title.appendChild(markup(doc.title, terms));
+
+    const meta = document.createElement('span');
+    meta.className = 'meta';
+    if (doc.section) {
+      const sec = document.createElement('span');
+      sec.className = 'section';
+      sec.textContent = doc.section;
+      meta.appendChild(sec);
+    }
+    const sc = document.createElement('span');
+    sc.className = 'score';
+    sc.textContent = score;
+    sc.title = 'Relevance score';
+    meta.appendChild(sc);
+
+    head.append(title, meta);
+
+    const snip = document.createElement('p');
+    snip.className = 'snippet';
+    snip.appendChild(markup(snippet, terms));
+
+    row.append(head, snip);
+
+    if (headings.length) {
+      const ul = document.createElement('ul');
+      ul.className = 'headings';
+      for (const h of headings) {
+        const hli = document.createElement('li');
+        hli.append('# ');
+        hli.appendChild(markup(h.text, terms));
+        ul.appendChild(hli);
+      }
+      row.appendChild(ul);
+    }
+
+    row.addEventListener('click', () => {
+      expanded = expanded === doc.route ? null : doc.route;
+      render();
+    });
+
+    li.appendChild(row);
+
+    if (expanded === doc.route) {
+      li.classList.add('is-active');
+      const body = document.createElement('div');
+      body.className = 'body';
+      const p = document.createElement('p');
+      p.appendChild(markup(doc.text, terms));
+      const route = document.createElement('span');
+      route.className = 'route';
+      route.textContent = doc.route;
+      body.append(p, route);
+      li.appendChild(body);
+    }
+
+    listEl.appendChild(li);
+  }
+}
+
+qEl.addEventListener('input', () => {
+  expanded = null;
+  render();
+});
+
+for (const chip of document.querySelectorAll('.chip')) {
+  chip.addEventListener('click', () => {
+    qEl.value = chip.textContent;
+    expanded = null;
+    render();
+    qEl.focus();
+  });
+}
+
+// "/" focuses search — the convention on docs sites, and it doesn't collide
+// with the host page's own shortcuts the way Cmd-K would.
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== qEl) {
+    e.preventDefault();
+    qEl.focus();
+    qEl.select();
+  } else if (e.key === 'Escape' && document.activeElement === qEl) {
+    qEl.value = '';
+    expanded = null;
+    render();
+  }
+});
+
+render();
+</script>
