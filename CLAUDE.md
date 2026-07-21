@@ -58,8 +58,21 @@ Stack: Next.js 13 · Nextra 2 (`nextra-theme-docs`) · MDX · React 18.
 
 ## Authoring content
 
-- Add a **published** article: create `pages/<section>/<slug>.mdx`, then add its
-  `slug: "Sidebar Title"` entry to that section's `_meta.json`.
+- **Scaffold a new doc:** `npm run new-doc` (interactive) or
+  `npm run new-doc -- --title "…" --section features [--audience customer]`.
+  It writes the `.mdx` with valid frontmatter into the correct tree, registers
+  it in that section's `_meta.json`, and **enforces the audience gate** (internal
+  sections only accept `internal`; published sections only `public`/`customer`).
+- **Rich content components** (media, callouts, layout) are available in **every**
+  `.mdx` with no import — they're provided globally via `pages/_app.jsx`
+  (`<MDXProvider>`) from `components/mdx/`. The set: `<YouTube>`, `<Video>`,
+  `<Figure>`, `<Callout>`, `<Button>`, `<Badge>`, `<Color>`, `<Highlight>`,
+  `<Lead>`, `<Font>`, `<Columns>/<Column>`, `<Card>/<CardGrid>`. Styles live in
+  `styles/mdx.css`. Live reference + examples: the **Rich content** guide at
+  `content-internal/how-to/howto-rich-content.mdx` (view via `npm run dev:internal`).
+  Adding a component to `components/mdx/index.js` makes it available site-wide.
+- Add a **published** article by hand: create `pages/<section>/<slug>.mdx`, then
+  add its `slug: "Sidebar Title"` entry to that section's `_meta.json`.
 - Every article carries frontmatter: `title`, `category`, `type`, `audience`,
   `updated`, `tags`.
 - **`audience:` gating (read `AUDIENCE.md`).** Values are `public`, `customer`,

@@ -9,8 +9,9 @@
     "build": "next build",
     "start": "next start",
     "search:index": "node scripts/build-search-index.mjs",
-    "dev:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && next dev",
-    "build:internal": "SITE_AUDIENCE=internal node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && next build"
+    "new-doc": "node scripts/new-doc.mjs",
+    "dev:internal": "node scripts/apply-audience.mjs --internal && node scripts/build-search-index.mjs && next dev",
+    "build:internal": "node scripts/apply-audience.mjs --internal && node scripts/build-search-index.mjs && next build"
   },
   "dependencies": {
     "next": "^13.5.6",

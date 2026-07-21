@@ -24,7 +24,12 @@ const PAGES = path.join(ROOT, 'pages')
 const INTERNAL = path.join(ROOT, 'content-internal')
 const INTERNAL_SECTIONS = ['system-usage', 'how-to']
 
-const audience = (process.env.SITE_AUDIENCE || 'public').toLowerCase()
+// Audience selection is cross-platform: prefer the `--internal` CLI flag (works
+// identically in PowerShell, cmd, and POSIX shells); fall back to the
+// SITE_AUDIENCE env var for back-compat.
+const audience = process.argv.includes('--internal')
+  ? 'internal'
+  : (process.env.SITE_AUDIENCE || 'public').toLowerCase()
 const includeInternal = audience === 'internal'
 
 function rmDir(dir) {
