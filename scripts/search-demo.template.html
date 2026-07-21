@@ -281,6 +281,40 @@
     border-top: 1px solid var(--hairline);
   }
 
+  /* Internal-only guides carry a badge so they're never mistaken for public
+     docs — the audience distinction is the whole point of the gate. Amber is
+     kept separate from the blue accent: it's semantic (restricted), not brand. */
+  .badge {
+    flex: none;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    border: 1px solid color-mix(in srgb, #b45309 40%, transparent);
+    color: #b45309;
+    background: color-mix(in srgb, #b45309 10%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    .badge { color: #fbbf7d; border-color: color-mix(in srgb, #fbbf7d 35%, transparent); }
+  }
+  :root[data-theme="dark"] .badge { color: #fbbf7d; border-color: color-mix(in srgb, #fbbf7d 35%, transparent); }
+  :root[data-theme="light"] .badge { color: #b45309; border-color: color-mix(in srgb, #b45309 40%, transparent); }
+
+  /* Show/hide-internal toggle. */
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .toggle input { accent-color: var(--accent); cursor: pointer; }
+
   @media (prefers-reduced-motion: no-preference) {
     .row { transition: background 0.12s ease; }
     .chip { transition: color 0.12s ease, border-color 0.12s ease; }
@@ -291,11 +325,10 @@
   <header class="masthead">
     <span class="eyebrow">PLCY Documentation Portal</span>
     <h1>Search, running on the real index</h1>
-    <p class="lede">
-      The same ranking code and the same 19-page corpus as the portal's
-      <code>/search</code> page, inlined into one file. Titles outrank headings,
-      which outrank body text; every term has to match somewhere. Pick a result
-      to read the indexed text behind it.
+    <p class="lede" id="lede">
+      The portal's actual ranking code and corpus, inlined into one file. Titles
+      outrank headings, which outrank body text; every term has to match
+      somewhere. Pick a result to read the indexed text behind it.
     </p>
   </header>
 
@@ -314,7 +347,11 @@
       <button class="chip" type="button">BYOK</button>
       <button class="chip" type="button">residency</button>
       <button class="chip" type="button">DSAR</button>
-      <button class="chip" type="button">posture score</button>
+      <button class="chip" type="button">rotate api key</button>
+      <label class="toggle" id="internalToggle" hidden>
+        <input type="checkbox" id="showInternal" checked>
+        Internal guides
+      </label>
     </div>
   </div>
 
@@ -334,12 +371,28 @@
 const INDEX = /*__INDEX__*/;
 const docs = INDEX.docs;
 
+// Replaced at build time: true when the internal operator guides are folded in.
+const HAS_INTERNAL = __HAS_INTERNAL__;
+const internalCount = docs.filter(d => d.internal).length;
+
 const qEl = document.getElementById('q');
 const listEl = document.getElementById('results');
 const countEl = document.getElementById('count');
 const emptyEl = document.getElementById('empty');
+const toggleEl = document.getElementById('internalToggle');
+const showInternalEl = document.getElementById('showInternal');
+const ledeEl = document.getElementById('lede');
 
 let expanded = null; // route of the open result, if any
+
+// The searchable set: internal guides drop out when the toggle is off, so the
+// counts and results mirror exactly what the public /search would return.
+function activeDocs() {
+  if (HAS_INTERNAL && showInternalEl && !showInternalEl.checked) {
+    return docs.filter(d => !d.internal);
+  }
+  return docs;
+}
 
 function markup(text, terms) {
   // highlight() returns [text, isMatch] runs, so nothing from the index is ever
@@ -360,12 +413,16 @@ function markup(text, terms) {
 function render() {
   const query = qEl.value;
   const terms = tokenize(query);
-  const results = search(docs, query);
+  const pool = activeDocs();
+  const results = search(pool, query);
 
   listEl.textContent = '';
 
   if (!query.trim()) {
-    countEl.textContent = docs.length + ' pages indexed.';
+    countEl.textContent = pool.length + ' pages indexed'
+      + (HAS_INTERNAL && showInternalEl && showInternalEl.checked
+          ? ' — incl. ' + internalCount + ' internal.'
+          : '.');
     emptyEl.hidden = false;
     emptyEl.innerHTML = 'Type a term above, or pick one of the examples.';
     return;
@@ -404,6 +461,13 @@ function render() {
 
     const meta = document.createElement('span');
     meta.className = 'meta';
+    if (doc.internal) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = 'Internal';
+      badge.title = 'Operator-only guide — excluded from the public /search';
+      meta.appendChild(badge);
+    }
     if (doc.section) {
       const sec = document.createElement('span');
       sec.className = 'section';
@@ -471,6 +535,20 @@ for (const chip of document.querySelectorAll('.chip')) {
     expanded = null;
     render();
     qEl.focus();
+  });
+}
+
+// When internal guides are in the build, reveal the toggle and say so up front,
+// so it's never ambiguous that this preview goes beyond the public /search.
+if (HAS_INTERNAL) {
+  toggleEl.hidden = false;
+  const note = document.createElement('span');
+  note.textContent = ' This preview also folds in the ' + internalCount +
+    ' operator-only guides (badged “Internal”) that the public /search excludes.';
+  ledeEl.appendChild(note);
+  showInternalEl.addEventListener('change', () => {
+    expanded = null;
+    render();
   });
 }
 
