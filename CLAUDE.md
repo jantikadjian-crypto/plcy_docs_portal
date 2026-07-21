@@ -58,6 +58,28 @@ Stack: Next.js 13 · Nextra 2 (`nextra-theme-docs`) · MDX · React 18.
 
 ## Authoring content
 
+- **Visual editor (Keystatic):** `npm run dev` → open `/keystatic`. A WYSIWYG
+  admin with a formatting toolbar and insertable blocks (YouTube, Video, Image,
+  Callout, Button, Badge, Columns, Cards, color/highlight/font). It reads/writes
+  the same `.mdx` files, one collection per section, and **preserves the audience
+  gate** (published collections only offer public/customer and write to `pages/`;
+  internal collections only offer internal and write to `content-internal/`).
+  - **Storage is LOCAL mode** — edits the working copy directly, no auth. It only
+    works under `npm run dev`. Config: `keystatic.config.jsx`; the editor blocks
+    that mirror `components/mdx/` live in `keystatic.components.jsx`; routes are
+    `pages/keystatic/[[...params]].jsx` + `pages/api/keystatic/[...params].js`.
+  - **Before deploying:** switch `storage` to `{ kind: 'github', repo: … }` and
+    add the Keystatic GitHub App so non-technical editors get a hosted, logged-in
+    admin — otherwise `/keystatic` ships publicly but can't function (local mode
+    needs the filesystem). That is phase-2's remaining step (needs the site live).
+  - Keystatic normalizes files it saves (unquoted YAML frontmatter, `*` bullets,
+    block-list tags, explicit attribute defaults) — cosmetic, renders identically.
+  - Hand-authored MDX only: **block components must be multi-line**
+    (`<Callout …>\n  text\n</Callout>`, not `<Callout>text</Callout>`) or Keystatic
+    can't parse the file. The editor always writes the correct form.
+  - New pages created in Keystatic are **not** auto-added to `_meta.json`, so they
+    render but sit at the end of the sidebar until you add a `_meta.json` entry
+    (or scaffold via `npm run new-doc`, which registers it).
 - **Scaffold a new doc:** `npm run new-doc` (interactive) or
   `npm run new-doc -- --title "…" --section features [--audience customer]`.
   It writes the `.mdx` with valid frontmatter into the correct tree, registers

@@ -1,15 +1,23 @@
 ---
-title: "Rich content: media, callouts & layout"
-category: "How-to"
-type: "Guide"
+title: 'Rich content: media, callouts & layout'
+category: How-to
+type: Guide
 audience: internal
-updated: "2026-07-20"
-tags: ["authoring", "mdx", "components", "video", "youtube", "callout", "images", "formatting"]
+updated: 2026-07-20
+tags:
+  - authoring
+  - mdx
+  - components
+  - video
+  - youtube
+  - callout
+  - images
+  - formatting
+description: Every rich-content block — media, callouts, layout — with a live example of each.
 ---
-
 # Rich content: media, callouts & layout
 
-_Every formatting block you can drop into a document, with a live example of each._
+*Every formatting block you can drop into a document, with a live example of each.*
 
 All of these work in **any** `.mdx` file — published or internal — with **no import line**. Just type the tag. The same set powers the visual editor, so what you write here is exactly what point-and-click will insert later.
 
@@ -23,9 +31,17 @@ All of these work in **any** `.mdx` file — published or internal — with **no
 
 Colored, titled admonition boxes. Types: `info`, `tip`, `success`, `warning`, `danger`, `note`.
 
-<Callout type="info" title="Note">This is an informational callout.</Callout>
-<Callout type="warning" title="Rotate keys regularly">API keys should be rotated every 90 days.</Callout>
-<Callout type="danger" title="Irreversible">Deleting a policy pack cannot be undone.</Callout>
+<Callout type="info" title="Note">
+  This is an informational callout.
+</Callout>
+
+<Callout type="warning" title="Rotate keys regularly">
+  API keys should be rotated every 90 days.
+</Callout>
+
+<Callout type="danger" title="Irreversible">
+  Deleting a policy pack cannot be undone.
+</Callout>
 
 ```mdx
 <Callout type="warning" title="Rotate keys regularly">
@@ -41,7 +57,7 @@ Paste a full YouTube link **or** just the id; both work.
 
 ```mdx
 <YouTube url="https://www.youtube.com/watch?v=aqz-KE-bpKQ" />
-<YouTube id="aqz-KE-bpKQ" start={30} />
+<YouTube id="aqz-KE-bpKQ" start="30" />
 ```
 
 ## Video — self-hosted file
@@ -56,7 +72,7 @@ For an `.mp4`/`.webm` you host yourself. Put the file under `public/media/` and 
 
 Use `<Figure>` when you need a caption, sizing, or alignment. Plain Markdown `![alt](/path)` still works for a bare image.
 
-<Figure src="/diagrams/architecture.svg" alt="PLCY architecture" caption="The control-plane / data-plane split." border />
+<Figure src="/diagrams/architecture.svg" alt="PLCY architecture" caption="The control-plane / data-plane split." align="center" border />
 
 ```mdx
 <Figure src="/diagrams/architecture.svg" alt="PLCY architecture"
@@ -67,23 +83,29 @@ Use `<Figure>` when you need a caption, sizing, or alignment. Plain Markdown `![
 
 A call-to-action link styled as a button. Internal paths route instantly; external URLs open in a new tab.
 
-<Button href="/technical/api-keys">Read the API guide</Button>
-<Button href="https://plcy.app" variant="secondary">Visit plcy.app</Button>
+<Button href="/technical/api-keys" variant="primary">
+  Read the API guide
+</Button>
+
+<Button href="https://plcy.app" variant="secondary">
+  Visit plcy.app
+</Button>
 
 ```mdx
-<Button href="/technical/api-keys">Read the API guide</Button>
-<Button href="https://plcy.app" variant="secondary">Visit plcy.app</Button>
+<Button href="/technical/api-keys">
+  Read the API guide
+</Button>
 ```
 
 ## Color & highlight
 
-<Color value="#1f6fd0">Brand-blue text</Color>, a <Highlight>highlighted phrase</Highlight>, or a <Highlight color="#d6f5e3">green swatch</Highlight>. Custom <Font family="ui-monospace" weight={700}>font runs</Font> when you truly need them.
+<Color value="#1f6fd0">Brand-blue text</Color>, a <Highlight>highlighted phrase</Highlight>, or a <Highlight color="#d6f5e3">green swatch</Highlight>. Custom <Font family="ui-monospace" weight="700">font runs</Font> when you truly need them.
 
 ```mdx
 <Color value="#1f6fd0">Brand-blue text</Color>
 <Highlight>highlighted phrase</Highlight>
 <Highlight color="#d6f5e3">green swatch</Highlight>
-<Font family="ui-monospace" weight={700}>font run</Font>
+<Font family="ui-monospace" weight="700">font run</Font>
 ```
 
 ## Badges
@@ -104,6 +126,7 @@ Side-by-side content that stacks on mobile.
   <Column>
     **BYOK** — bring your own model keys. You pay the provider directly.
   </Column>
+
   <Column>
     **PLCY-managed** — inference billed through PLCY on one invoice.
   </Column>
@@ -124,9 +147,11 @@ A responsive grid of cards, optionally links.
   <Card title="Architecture" href="/technical/architecture" icon="◈">
     How the control and data planes fit together.
   </Card>
+
   <Card title="Policy packs" href="/features/policy-packs" icon="▦">
     Controls, primitives, and composite packs.
   </Card>
+
   <Card title="DSAR" href="/features/incidents-dsar" icon="✎">
     Handling data-subject requests.
   </Card>
