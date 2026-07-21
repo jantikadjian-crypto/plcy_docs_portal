@@ -15,7 +15,7 @@ Seeded from the PLCY admin console's in-app documentation.
 ```bash
 npm install
 npm run dev            # http://localhost:3000  (public site)
-npm run build          # static production build (public — safe to deploy)
+npm run build          # production build (public — safe to deploy)
 
 npm run dev:internal   # public site + internal guides, for local review only
 ```

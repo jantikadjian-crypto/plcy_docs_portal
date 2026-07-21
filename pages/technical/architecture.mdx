@@ -5,6 +5,7 @@ type: "Graphic"
 audience: public
 updated: "2026-07-17"
 tags: ["architecture", "control plane", "data plane", "design"]
+description: "The SaaS console/control plane, the open-source data plane, and how they connect."
 ---
 
 # Architecture overview
@@ -13,7 +14,7 @@ _The SaaS console/control plane, the open-source data plane, and how they connec
 
 PLCY pairs a SaaS governance console and control plane with an open-source data plane that runs inside the customer environment. The console configures policy; the data plane enforces it on every AI request in real time and streams evidence back.
 
-![architecture.svg](/diagrams/architecture.svg)
+![PLCY platform architecture — the SaaS control plane (admin console, control-plane API, policy & governance engine, billing, audit) connected to the open-source data plane running inside the customer environment, with BYOK and PLCY-managed model access.](/diagrams/architecture.svg)
 
 ## Planes
 

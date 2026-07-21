@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs",
+    "predev": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && node scripts/gen-seo.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs",
+    "prebuild": "node scripts/apply-audience.mjs && node scripts/build-search-index.mjs && node scripts/gen-seo.mjs",
     "build": "next build",
     "start": "next start",
     "search:index": "node scripts/build-search-index.mjs",
